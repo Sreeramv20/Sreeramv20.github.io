@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v6.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
+<!-- A bit of CSS: change stroke color of circle on hover (white -> black) -->
+<style>
+  .bubbles {
+    stroke-width: 2px;
+    stroke: white;
+  }
+  .bubbles:hover {
+    stroke: black;
+  }
+</style>
+<script>
+
+  // set the dimensions and margins of the graph
+  const margin = {top: 80, right: -400, bottom: 30, left: 50},
+          width = 500 - margin.left - margin.right,
+          height = 420 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  const svg = d3.select("#my_dataviz")
+          .append("svg")
+          .attr("width", 1000+width + margin.left + margin.right)
+          .attr("height",300+ height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  //Read the data
+  d3.csv("https://gist.githubusercontent.com/Sreeramv20/e3e6dfae059c5f756ddbdcf7d6385d29/raw/a983df90cc68578eb01cc03028314b15a8551ef2/marvelmovies.csv").then( function(data) {
+
+    // Add X axis
+    const x = d3.scaleLinear()
+            .domain([d3.min(data, function(d) { return d["Budget"]}), d3.max(data, function(d) { return d["Budget"]})])
+            .range([ 0, width ]);
+    svg.append("g")
+            .attr("transform", `translate(0, ${height})`)
+            .call(d3.axisBottom(x));
+
+    // Add Y axis
+    const y = d3.scaleLinear()
+            .domain([d3.min(data, function(d) { return d["Review Rating"]}), d3.max(data, function(d) { return d["Review Rating"]})])
+            .range([ height, 0]);
+    svg.append("g")
+            .call(d3.axisLeft(y));
+
+    // Add a scale for bubble size
+    const z = d3.scaleLinear()
+            .domain([d3.min(data, function(d) { return +d["Box office"]}), d3.max(data, function(d) { return +d["Box office"]})])
+            .range([5, 40]);
+
+    // Add a scale for bubble color
+    const myColor = d3.scaleOrdinal()
+            .domain(["Captain Marvel","Captain America: The Winter Soldier","Iron Man 2","The Incredible Hulk","Avengers: Endgame","Doctor Strange in the Multiverse of Madness","Black Panther","Avengers: Infinity War","Doctor Strange","Ant-Man and the Wasp","Iron Man","Guardians of the Galaxy","Thor","Spider-Man: Homecoming","Guardians of the Galaxy Vol. 2","Captain America: The First Avenger","Thor: The Dark World","Avengers: Age of Ultron","Spider-Man: Far from Home","Spider-Man: No Way Home","Eternals","Iron Man 3","The Avengers","Shang-Chi and the Legend of the Ten Rings","Ant-Man","Thor: Love and Thunder","Black Widow","Captain America: Civil War","Thor: Ragnarok"])
+            .range(["gold", "blue", "green", "yellow", "yellowgreen", "grey", "darkgreen", "pink", "brown", "slateblue", "grey1", "orange","lightpink","magenta","goldenrod","orchid","cyan","sienna","seagreen","sandybrown","salmon","royalblue","rosybrown","purple","powderblue","plum","palevioletred","paleturquoise","palegreen","darkcyan"])
+
+    // -1- Create a tooltip div that is hidden by default:
+    const tooltip = d3.select("#my_dataviz")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "black")
+            .style("border-radius", "5px")
+            .style("padding", "10px")
+            .style("color", "white")
+
+    // -2- Create 3 functions to show / update (when mouse move but stay on same circle) / hide the tooltip
+    const showTooltip = function(event, d) {
+      tooltip
+              .transition()
+              .duration(200)
+      tooltip
+              .style("opacity", 1)
+              .html("Title: " + d.Title + "<br> Budget: "+ d["Budget"]+"<br>Box Office: "+d["Box office"]+ "<br> Rating: "+d["Review Rating"])
+              .style("left", (event.x)/2 + "px")
+              .style("top", (event.y)/2+30 + "px")
+    }
+    const moveTooltip = function(event, d) {
+      tooltip
+              .style("left", (event.x)/2 + "px")
+              .style("top", (event.y)/2+30 + "px")
+    }
+    const hideTooltip = function(event, d) {
+      tooltip
+              .transition()
+              .duration(200)
+              .style("opacity", 0)
+    }
+
+    // Add dots
+    svg.append('g')
+            .selectAll("dot")
+            .data(data)
+            .join("circle")
+            .attr("class", "bubbles")
+            .attr("cx", d => x(d["Budget"]))
+            .attr("cy", d => y(d["Review Rating"]))
+            .attr("r", d => z(d["Box office"]))
+            .style("fill", d => myColor(d.Title))
+            // -3- Trigger the functions
+            .on("mouseover", showTooltip )
+            .on("mousemove", moveTooltip )
+            .on("mouseleave", hideTooltip )
+
+  })
+  // Add title to graph
+  svg.append("text")
+          .attr("x", 0)
+          .attr("y", -50)
+          .attr("text-anchor", "left")
+          .style("font-size", "18px")
+          .text("Marvel Movies (Budget Vs Rating Vs Gross)");
+  // Add x axis label to graph
+  svg.append("text")
+          .attr("x", 400)
+          .attr("y", 380)
+          .attr("text-anchor", "left")
+          .style("font-size", "18px")
+          .text("Budget");
+
+  svg.append('text')
+          .attr('class', 'title')
+          .attr('x',155)
+          .attr('y', 40)
+          .text("Rating")
+          .attr("transform", "rotate(90)" );
+</script>
