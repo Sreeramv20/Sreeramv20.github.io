@@ -60,7 +60,7 @@
 
     const mousemove = function(event, d) {
       tooltip
-              .html(`The total Gross of ${d.Title} is: $ ${d.Gross}`)
+              .html(`The total Gross of ${d.Title} is: $${d3.format(',')(d.Gross)}`)
               .style("left", (event.x)/2 + "px")
               .style("top", (event.y)/2 + "px")
     }
@@ -105,7 +105,7 @@
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
-              d3.selectAll("rect").transition().duration(50).attr("stroke", "#006400")
+              d3.selectAll("rect").transition().duration(50)
                   .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
 
@@ -226,7 +226,7 @@
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
-              d3.selectAll("rect").transition().duration(50).attr("stroke", "#006400")
+              d3.selectAll("rect").transition().duration(50)
                   .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
 
@@ -344,7 +344,7 @@
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
-              d3.selectAll("rect").transition().duration(50).attr("stroke", "#006400")
+              d3.selectAll("rect").transition().duration(50)
                   .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
     svgc.append("text")
