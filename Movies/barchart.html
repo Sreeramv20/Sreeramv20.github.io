@@ -6,7 +6,17 @@
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
-
+<style>
+    div.tooltip {
+        position: absolute;
+        padding: 7px;
+        font-size: 0.8em;
+        pointer-events: none;
+        background: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+    }</style>
 <script>
 
   // set the dimensions and margins of the graph
@@ -44,35 +54,37 @@
             .padding(.1);
     svga.append("g")
             .call(d3.axisLeft(y))
-    const tooltip = d3.select("#my_dataviz")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-    const mouseover = function(event, d) {
-      tooltip
+
+
+
+      const Tooltip = d3.select("#my_dataviz")
+          .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "2px")
+          .style("border-radius", "5px")
+          .style("padding", "5px")
+
+
+      const mouseover = function(event,d) {
+          Tooltip
               .style("opacity", 1)
-    }
+      }
+      const mousemove = function(event,d) {
+          Tooltip
 
-    const mousemove = function(event, d) {
-      tooltip
               .html(`The total Gross of ${d.Title} is: $${d3.format(',')(d.Gross)}`)
-              .style("left", (event.x)/2 + "px")
-              .style("top", (event.y)/2 + "px")
-    }
-
-    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-    const mouseleave = function(event,d) {
-      tooltip
-              .transition()
-              .duration(200)
+              .style("left", `${event.layerX+10}px`)
+              .style("top", `${event.layerY}px`)
+      }
+      const mouseleave = function(event,d) {
+          Tooltip
               .style("opacity", 0)
-    }
-    //Bars
+      }
+
+      //Bars
     svga.selectAll("myRect")
             .data(data)
             .enter()
@@ -99,9 +111,10 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-            .on("mousemove",mousemove)
-            .on("mouseout", function() {
-              tooltip
+             .on("mouseover", mouseover)
+             .on("mousemove", mousemove)
+             .on("mouseout", function() {
+              Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
@@ -135,7 +148,7 @@
 
     // Add X axis
     var x = d3.scaleLinear()
-            .domain([0,100])
+            .domain([0,10])
             .range([ 0, width]);
     svgb.append("g")
             .attr("transform", `translate(0, ${height})`)
@@ -160,36 +173,35 @@
           .attr("y1", 0)      // y position of the first end of the line
           .attr("x2", 0)     // x position of the second end of the line
           .attr("y2", 530);
-    const tooltip = d3.select("#my_dataviz")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-    const mouseover = function(event, d) {
-      tooltip
+      const Tooltip = d3.select("#my_dataviz")
+          .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "2px")
+          .style("border-radius", "5px")
+          .style("padding", "5px")
+
+
+      const mouseover = function(event,d) {
+          Tooltip
               .style("opacity", 1)
-    }
-
-    const mousemove = function(event, d) {
-      tooltip
+      }
+      const mousemove = function(event,d) {
+          Tooltip
               .html(`The IMDB Rating of ${d.Title} is: ${d.Rating}`)
-              .style("left", (event.x)/2 + "px")
-              .style("top", (event.y)/2 + "px")
-    }
-
-    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-    const mouseleave = function(event,d) {
-      tooltip
-              .transition()
-              .duration(200)
+              .style("left", `${event.layerX+10}px`)
+              .style("top", `${event.layerY}px`)
+      }
+      const mouseleave = function(event,d) {
+          Tooltip
               .style("opacity", 0)
-    }
+      }
+
 
     //Bars
+
     svgb.selectAll("myRect")
             .data(data)
             .enter()
@@ -199,7 +211,7 @@
               return y(d.Title);
             })
             .attr("width", function (d) {
-              return x(d.Rating*10);
+              return x(d.Rating);
             })
             .attr("height", y.bandwidth() - 10)
         .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
@@ -220,9 +232,10 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-            .on("mousemove",mousemove)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
             .on("mouseout", function() {
-              tooltip
+              Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
@@ -272,35 +285,34 @@
             .padding(.1);
     // svgc.append("g")
     //     .call(d3.axisLeft(y))
-    const tooltip = d3.select("#my_dataviz")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px")
-    const mouseover = function(event, d) {
-      tooltip
+      const Tooltip = d3.select("#my_dataviz")
+          .append("div")
+          .style("opacity", 0)
+          .attr("class", "tooltip")
+          .style("background-color", "white")
+          .style("border", "solid")
+          .style("border-width", "2px")
+          .style("border-radius", "5px")
+          .style("padding", "5px")
+
+
+      const mouseover = function(event,d) {
+          Tooltip
               .style("opacity", 1)
-    }
-
-    const mousemove = function(event, d) {
-      tooltip
+      }
+      const mousemove = function(event,d) {
+          Tooltip
               .html(`The runtime of ${d.Title} is: ${d.Runtime} min`)
-              .style("left", (event.x)/2 + "px")
-              .style("top", (event.y)/2+ "px")
-    }
-
-    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-    const mouseleave = function(event,d) {
-      tooltip
-              .transition()
-              .duration(200)
+              .style("left", `${event.layerX+10}px`)
+              .style("top", `${event.layerY}px`)
+      }
+      const mouseleave = function(event,d) {
+          Tooltip
               .style("opacity", 0)
-    }
+      }
+
     //Bars
+
       svgc.append("line")          // attach a line
           .style("stroke", "black")  // colour the line
           .attr("x1", 0)     // x position of the first end of the line
@@ -338,9 +350,10 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-            .on("mousemove",mousemove)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
             .on("mouseout", function() {
-              tooltip
+              Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
