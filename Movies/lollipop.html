@@ -72,7 +72,6 @@
             .range([ 0, width]);
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .attr("stroke", "white")
             .call(d3.axisBottom(x))
             .selectAll("text")
             .attr("transform", "translate(-10,0)rotate(-45)")
@@ -84,7 +83,6 @@
             .domain(data.map(function(d) { return d.Company; }))
             .padding(1);
         svg.append("g")
-            .attr("stroke", "white")
             .call(d3.axisLeft(y))
 
 // Lines
