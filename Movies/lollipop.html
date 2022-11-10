@@ -72,7 +72,6 @@
             .range([ 0, width]);
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
-            .style("fill", "white")
             .attr("stroke", "white")
             .call(d3.axisBottom(x))
             .selectAll("text")
