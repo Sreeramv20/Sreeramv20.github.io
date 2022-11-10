@@ -84,7 +84,6 @@
             .domain(data.map(function(d) { return d.Company; }))
             .padding(1);
         svg.append("g")
-            .style("fill", "white")
             .attr("stroke", "white")
             .call(d3.axisLeft(y))
 
