@@ -4,7 +4,6 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
 
-<!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 <style>
     div.tooltip {
@@ -51,14 +50,14 @@
             .style("border-radius", "5px")
             .style("padding", "5px")
 
-                // Three function that change the tooltip when user hover / move / leave a cell
+
         const mouseover = function(event,d) {
             Tooltip
                 .style("opacity", 1)
         }
         const mousemove = function(event,d) {
             Tooltip
-                .html("Company: " + d.Company+"<br>Total Gross: "+d.Gross+"<br>Total Movies: "+d.Moviecount)
+                .html("Company: " + d.Company+"<br>Total Gross: $"+d3.format(',')(d.Gross)+"<br>Total Movies: "+d.Moviecount)
                 .style("left", `${event.layerX+10}px`)
                 .style("top", `${event.layerY}px`)
         }
@@ -73,6 +72,8 @@
             .range([ 0, width]);
         svg.append("g")
             .attr("transform", `translate(0, ${height})`)
+            .style("fill", "white")
+            .attr("stroke", "white")
             .call(d3.axisBottom(x))
             .selectAll("text")
             .attr("transform", "translate(-10,0)rotate(-45)")
@@ -84,6 +85,8 @@
             .domain(data.map(function(d) { return d.Company; }))
             .padding(1);
         svg.append("g")
+            .style("fill", "white")
+            .attr("stroke", "white")
             .call(d3.axisLeft(y))
 
 // Lines
