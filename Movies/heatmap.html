@@ -4,6 +4,8 @@
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
 
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 <style>
@@ -19,15 +21,37 @@
 }</style>
 <script>
 
+  
+ const annotations = [
+       {
+          note: {
+            label: "Season 8 was the worst season by far. This is reflected by the ratings starting to drop around episode 1 of this season. It is said that the season recieved poor ratings due to feeling rushed.",
+            title: "Season 8",
+            wrap: 150,
+            align: "left"
+          },
+          connector: {
+            end: "arrow" // 'dot' also available
+          },
+          x:430,
+          y: 400,
+          dy: -100,
+          dx: 100
+        }].map(function(d){ d.color = "black"; return d})
+
+        const makeAnnotations = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations)
+  
   // set the dimensions and margins of the graph
-  const margin = {top: 80, right: 25, bottom: 30, left: 40},
+  var margin = {top: 80, right: 25, bottom: 30, left: 40},
           width = 450 - margin.left - margin.right,
           height = 450 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
   const svg = d3.select("#my_dataviz")
           .append("svg")
-          .attr("width", 100+width + margin.left + margin.right)
+          .attr("width", 300+width + margin.left + margin.right)
           .attr("height", 100+height + margin.top + margin.bottom)
           .append("g")
           .attr("transform", `translate(${margin.left}, ${margin.top})`);
@@ -130,7 +154,9 @@
           .attr('y', 40)
           .text("Episode")
           .attr("transform", "rotate(90)" );
-
-
+ d3.select("svg")
+          .append("g")
+          .attr("class", "annotation-group")
+          .call(makeAnnotations)
 
 </script>
