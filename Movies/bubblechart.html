@@ -3,7 +3,13 @@
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
 
+<style>
+    .legendSize circle {
+        fill: darkred;
+    }
+</style>
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 
@@ -90,7 +96,7 @@
     const mousemove = function(event,d) {
       Tooltip
 
-              .html("Title: " + d.Title + "<br> Budget: $"+ d3.format(',')(d["Budget"])+"<br>Box Office: $"+d3.format(',')(d["Box office"])+ "<br> Rating: "+d["Review Rating"])
+              .html("Title: " + d.Title + "<br> Budget: $"+ d3.format('.3~s')(d["Budget"]).replace('G', 'B')+"<br>Box Office: $"+d3.format('.3~s')(d["Box office"]).replace('G', 'B')+ "<br> Rating: "+d["Review Rating"])
               .style("left", `${event.layerX+10}px`)
               .style("top", `${event.layerY}px`)
     }
@@ -131,4 +137,32 @@
           .attr('y', 40)
           .text("Rating")
           .attr("transform", "rotate(90)" );
+
+  var linearSize = d3.scaleLinear().domain([263427551,2681988528]).range([5, 40]);
+
+
+      svg.append("g")
+              .attr("class", "legendSize")
+              .attr("transform", "translate(1000, 100)");
+
+  var legendSize = d3.legendSize()
+         //.labelFormat(d3.format("s"))
+          .labelFormat('.3s')
+          .scale(linearSize)
+          .shape('circle')
+          .shapePadding(10)
+          .labelOffset(20)
+          .orient('vertical');
+
+
+  svg.select(".legendSize")
+          .call(legendSize);
+
+  svg.append("text")
+      .attr("x", 1050)
+      .attr("y", 80)
+      .attr("text-anchor", "left")
+      .style("font-size", "18px")
+      .text("Gross");
+
 </script>
