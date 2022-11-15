@@ -7,16 +7,16 @@
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
 <style>
-    div.tooltip {
-        position: absolute;
-        padding: 7px;
-        font-size: 0.8em;
-        pointer-events: none;
-        background: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
-    }</style>
+  div.tooltip {
+    position: absolute;
+    padding: 7px;
+    font-size: 0.8em;
+    pointer-events: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.25);
+  }</style>
 <script>
 
   // set the dimensions and margins of the graph
@@ -57,41 +57,43 @@
 
 
 
-      const Tooltip = d3.select("#my_dataviz")
-          .append("div")
-          .style("opacity", 0)
-          .attr("class", "tooltip")
-          .style("background-color", "white")
-          .style("border", "solid")
-          .style("border-width", "2px")
-          .style("border-radius", "5px")
-          .style("padding", "5px")
+    const Tooltip = d3.select("#my_dataviz")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
 
 
-      const mouseover = function(event,d) {
-          Tooltip
+    const mouseover = function(event,d) {
+      Tooltip
               .style("opacity", 1)
-          d3.select(this).transition().duration(50).attr("fill", "goldenrod")
-          svga.selectAll("rect")
+      d3.select(this).transition().duration(50).attr("fill", "goldenrod")
+      svga.selectAll("rect")
               .filter(function(d, i) {
-                  return i === index_;
+                return i === index_;
               })
               .attr("stroke", "yellow")
               .attr("fill", "yellow")
-      }
-      const mousemove = function(event,d) {
-          Tooltip
+    }
+    const mousemove = function(event,d) {
+      Tooltip
 
-              .html(`The total Gross of ${d.Title} is: $${d3.format(',')(d.Gross)}`)
+              .html(`The total Gross of ${d.Title} is: $${d3.format('.3~s')(d.Gross).replace('G', 'B')}`)
               .style("left", `${event.layerX+10}px`)
               .style("top", `${event.layerY}px`)
-      }
-      const mouseleave = function(event,d) {
-          Tooltip
-              .style("opacity", 0)
-      }
+    }
 
-      //Bars
+
+    const mouseleave = function(event,d) {
+      Tooltip
+              .style("opacity", 0)
+    }
+
+    //Bars
     svga.selectAll("myRect")
             .data(data)
             .enter()
@@ -100,7 +102,7 @@
             .attr("y", function(d) { return y(d.Title); })
             .attr("width", function(d) { return x(d.Gross); })
             .attr("height", y.bandwidth()-10 )
-        .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
+            .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
             .on('mouseover', function(data, index_){
               tooltip
                       .style("opacity", 1)
@@ -118,15 +120,15 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-             .on("mouseover", mouseover)
-             .on("mousemove", mousemove)
-             .on("mouseout", function() {
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseout", function() {
               Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
               d3.selectAll("rect").transition().duration(50)
-                  .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
+                      .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
 
 
@@ -174,44 +176,44 @@
     // svgb.append("g")
     //     .call(d3.axisLeft(y));
 
-      svgb.append("line")          // attach a line
-          .style("stroke", "black")  // colour the line
-          .attr("x1", 0)     // x position of the first end of the line
-          .attr("y1", 0)      // y position of the first end of the line
-          .attr("x2", 0)     // x position of the second end of the line
-          .attr("y2", 530);
-      const Tooltip = d3.select("#my_dataviz")
-          .append("div")
-          .style("opacity", 0)
-          .attr("class", "tooltip")
-          .style("background-color", "white")
-          .style("border", "solid")
-          .style("border-width", "2px")
-          .style("border-radius", "5px")
-          .style("padding", "5px")
+    svgb.append("line")          // attach a line
+            .style("stroke", "black")  // colour the line
+            .attr("x1", 0)     // x position of the first end of the line
+            .attr("y1", 0)      // y position of the first end of the line
+            .attr("x2", 0)     // x position of the second end of the line
+            .attr("y2", 530);
+    const Tooltip = d3.select("#my_dataviz")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
 
 
-      const mouseover = function(event,d) {
-          Tooltip
+    const mouseover = function(event,d) {
+      Tooltip
               .style("opacity", 1)
-      }
-      const mousemove = function(event,d) {
-          Tooltip
+    }
+    const mousemove = function(event,d) {
+      Tooltip
               .html(`The IMDB Rating of ${d.Title} is: ${d.Rating}`)
               .style("left", `${event.layerX+10}px`)
               .style("top", `${event.layerY}px`)
-          d3.select(this).transition().duration(50).attr("fill", "goldenrod")
-          svga.selectAll("rect")
+      d3.select(this).transition().duration(50).attr("fill", "goldenrod")
+      svga.selectAll("rect")
               .filter(function(d, i) {
-                  return i === index_;
+                return i === index_;
               })
               .attr("stroke", "yellow")
               .attr("fill", "yellow")
-      }
-      const mouseleave = function(event,d) {
-          Tooltip
+    }
+    const mouseleave = function(event,d) {
+      Tooltip
               .style("opacity", 0)
-      }
+    }
 
 
     //Bars
@@ -228,7 +230,7 @@
               return x(d.Rating);
             })
             .attr("height", y.bandwidth() - 10)
-        .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
+            .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
             .on('mouseover', function(data, index_){
               tooltip
                       .style("opacity", 1)
@@ -246,15 +248,15 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
             .on("mouseout", function() {
               Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
               d3.selectAll("rect").transition().duration(50)
-                  .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
+                      .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
 
 
@@ -299,47 +301,47 @@
             .padding(.1);
     // svgc.append("g")
     //     .call(d3.axisLeft(y))
-      const Tooltip = d3.select("#my_dataviz")
-          .append("div")
-          .style("opacity", 0)
-          .attr("class", "tooltip")
-          .style("background-color", "white")
-          .style("border", "solid")
-          .style("border-width", "2px")
-          .style("border-radius", "5px")
-          .style("padding", "5px")
+    const Tooltip = d3.select("#my_dataviz")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
 
 
-      const mouseover = function(event,d) {
-          Tooltip
+    const mouseover = function(event,d) {
+      Tooltip
               .style("opacity", 1)
-          d3.select(this).transition().duration(50).attr("fill", "goldenrod")
-          svga.selectAll("rect")
+      d3.select(this).transition().duration(50).attr("fill", "goldenrod")
+      svga.selectAll("rect")
               .filter(function(d, i) {
-                  return i === index_;
+                return i === index_;
               })
               .attr("stroke", "yellow")
               .attr("fill", "yellow")
-      }
-      const mousemove = function(event,d) {
-          Tooltip
+    }
+    const mousemove = function(event,d) {
+      Tooltip
               .html(`The runtime of ${d.Title} is: ${d.Runtime} min`)
               .style("left", `${event.layerX+10}px`)
               .style("top", `${event.layerY}px`)
-      }
-      const mouseleave = function(event,d) {
-          Tooltip
+    }
+    const mouseleave = function(event,d) {
+      Tooltip
               .style("opacity", 0)
-      }
+    }
 
     //Bars
 
-      svgc.append("line")          // attach a line
-          .style("stroke", "black")  // colour the line
-          .attr("x1", 0)     // x position of the first end of the line
-          .attr("y1", 0)      // y position of the first end of the line
-          .attr("x2", 0)     // x position of the second end of the line
-          .attr("y2", 530);
+    svgc.append("line")          // attach a line
+            .style("stroke", "black")  // colour the line
+            .attr("x1", 0)     // x position of the first end of the line
+            .attr("y1", 0)      // y position of the first end of the line
+            .attr("x2", 0)     // x position of the second end of the line
+            .attr("y2", 530);
 
     svgc.selectAll("myRect")
             .data(data)
@@ -353,7 +355,7 @@
               return x(d.Runtime);
             })
             .attr("height", y.bandwidth() - 10)
-        .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
+            .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); })
             .on('mouseover', function(data, index_){
               tooltip
                       .style("opacity", 1)
@@ -371,15 +373,15 @@
                       .attr("stroke", "yellow")
                       .attr("fill", "yellow")
             })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
+            .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
             .on("mouseout", function() {
               Tooltip
                       .transition()
                       .duration(200)
                       .style("opacity", 0)
               d3.selectAll("rect").transition().duration(50)
-                  .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
+                      .attr("fill", function(d) { return (d["MarvelorDC"]=="Marvel"? "DarkRed" : "DarkBlue"); });
             })
     svgc.append("text")
             .text("Runtime(Min)")
