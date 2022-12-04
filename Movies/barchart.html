@@ -3,6 +3,7 @@
 
 <!-- Load d3.js -->
 <script src="https://d3js.org/d3.v6.js"></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
 <!-- Create a div where the graph will take place -->
 <div id="my_dataviz"></div>
@@ -35,7 +36,31 @@
   // Parse the Data
   d3.csv("https://gist.githubusercontent.com/Sreeramv20/e9affe51bd4e4d9c89296d91d8154f3a/raw/28d3b096020994145ef587a7fabef91a3ae7865d/marvelvsdc.csv").then( function(data) {
 
+      const annotations = [
+          {
+              note: {
+                  label: "Although Infinity wars rating is not much higher than the other movies, the amount it made is multiple times higher. I think this is because of the hype around marvel moves.",
+                  title: "Marvel Hype",
+                  wrap: 150,
+                  align: "left"
+              },
+              connector: {
+                  end: "arrow" // 'dot' also available
+              },
+              x: 580,
+              y: 320,
+              dy: 57,
+              dx: 2
+          }].map(function(d){ d.color = "black"; return d})
 
+      const makeAnnotations = d3.annotation()
+          .type(d3.annotationLabel)
+          .annotations(annotations)
+
+      d3.select("svg")
+          .append("g")
+          .attr("class", "annotation-group")
+          .call(makeAnnotations)
     // Add X axis
     var x = d3.scaleLinear()
             .domain([0,2200000000])
